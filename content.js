@@ -13,8 +13,6 @@ tooltip.style.cssText = `
   display: none;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   animation: tooltipFadeIn 0.3s ease-out;
-  cursor: default;
-  user-select: text;
 `;
 
 // Add animation styles
@@ -52,7 +50,6 @@ style.textContent = `
   
   .kidify-copy-btn {
     margin-top: 10px;
-    margin-right: 10px;
     padding: 6px 12px;
     background: #f0f0f0;
     color: #333;
@@ -91,10 +88,8 @@ style.textContent = `
     animation: spin 0.8s linear infinite;
   }
   
-  .kidify-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
   
   .kidify-explanation {
@@ -103,21 +98,6 @@ style.textContent = `
     border-radius: 8px;
     margin: 10px 0;
   }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
-  /* Make tooltip draggable visual cue */
-  .kidify-header {
-    cursor: move;
-    user-select: none;
-    margin: -20px -20px 15px -20px;
-    padding: 15px 20px;
-    background: #f8f7ff;
-    border-radius: 12px 12px 0 0;
-    border-bottom: 1px solid #e8e6ff;
-  }
 `;
 document.head.appendChild(style);
 
@@ -125,48 +105,9 @@ const tooltipContent = document.createElement('div');
 tooltip.appendChild(tooltipContent);
 document.body.appendChild(tooltip);
 
-// Keep tooltip open until explicitly closed
-let keepTooltipOpen = true;
-let isDragging = false;
-let dragOffset = { x: 0, y: 0 };
-
-// Make tooltip draggable
-function makeTooltipDraggable() {
-  const header = tooltip.querySelector('.kidify-header');
-  if (!header) return;
-  
-  header.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    dragOffset.x = e.clientX - tooltip.offsetLeft;
-    dragOffset.y = e.clientY - tooltip.offsetTop;
-    tooltip.style.cursor = 'grabbing';
-  });
-  
-  document.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    
-    const newX = e.clientX - dragOffset.x;
-    const newY = e.clientY - dragOffset.y;
-    
-    // Keep tooltip within viewport
-    const maxX = window.innerWidth - tooltip.offsetWidth - 20;
-    const maxY = window.innerHeight - tooltip.offsetHeight - 20;
-    
-    tooltip.style.left = `${Math.min(Math.max(20, newX), maxX)}px`;
-    tooltip.style.top = `${Math.min(Math.max(20, newY), maxY)}px`;
-  });
-  
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-    tooltip.style.cursor = 'default';
-  });
-}
-
 // Listen for messages from background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "kidify") {
-    // Close any existing tooltip
-    tooltip.style.display = 'none';
     showKidification(request.text);
   }
 });
@@ -174,13 +115,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 async function showKidification(text) {
   // Show loading state with Kidify branding
   tooltipContent.innerHTML = `
-    <div class="kidify-header">
-      <h3 style="margin: 0; color: #5B4CFF; font-size: 18px; display: flex; align-items: center; justify-content: space-between;">
-        <span>Kidify</span>
-        <span style="font-size: 12px; color: #999; font-weight: normal;">Making the complex simple</span>
-      </h3>
-    </div>
-    <div style="text-align: center; padding: 20px;">
+    <div style="text-align: center;">
+      <h3 style="margin: 0 0 10px 0; color: #5B4CFF; font-size: 18px;">Kidify</h3>
       <p style="margin: 0; color: #666; font-size: 14px;" class="kidify-loading">
         <span class="kidify-spinner"></span>
         Making it simple...
@@ -214,21 +150,17 @@ async function showKidification(text) {
   tooltip.style.top = `${top}px`;
   tooltip.style.display = 'block';
   
-  // Make it draggable
-  makeTooltipDraggable();
-  
   // Get kidified explanation from background script
   chrome.runtime.sendMessage(
     { action: "getKidification", text: text },
     (response) => {
       if (response.error) {
         tooltipContent.innerHTML = `
-          <div class="kidify-header">
-            <h3 style="margin: 0; color: #5B4CFF; font-size: 18px;">
-              Kidify
-            </h3>
-          </div>
           <div>
+            <h3 style="margin: 0 0 10px 0; color: #5B4CFF; font-size: 18px; display: flex; align-items: center; gap: 8px;">
+              <span>Kidify</span>
+              <span style="font-size: 14px; color: #999; font-weight: normal;">Making the complex simple</span>
+            </h3>
             <p style="margin: 0 0 15px 0; color: #dc3545; font-size: 14px;">
               ⚠️ ${response.error}
             </p>
@@ -241,12 +173,10 @@ async function showKidification(text) {
         const truncatedText = text.length > 50 ? text.substring(0, 50) + '...' : text;
         
         tooltipContent.innerHTML = `
-          <div class="kidify-header">
-            <h3 style="margin: 0; color: #5B4CFF; font-size: 18px; display: flex; align-items: center; gap: 8px;">
+          <div>
+            <h3 style="margin: 0 0 10px 0; color: #5B4CFF; font-size: 18px; display: flex; align-items: center; gap: 8px;">
               <span>🌟 Kidified!</span>
             </h3>
-          </div>
-          <div>
             <p style="margin: 0 0 10px 0; font-size: 13px; color: #666; font-style: italic;">
               "${truncatedText}"
             </p>
@@ -255,9 +185,9 @@ async function showKidification(text) {
                 ${response.explanation}
               </p>
             </div>
-            <div class="kidify-buttons">
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
               <button class="kidify-copy-btn" id="copyBtn">
-                📋 Copy Explanation
+                📋 Copy
               </button>
               <button class="kidify-close-btn" style="width: auto; margin-top: 0;">
                 Close
@@ -267,34 +197,38 @@ async function showKidification(text) {
         `;
       }
       
-      // Add click handler to close button
-      const closeBtn = tooltip.querySelector('.kidify-close-btn');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-          tooltip.style.display = 'none';
-        });
-      }
-      
-      // Add copy functionality
-      const copyBtn = tooltip.querySelector('#copyBtn');
-      const explanationText = tooltip.querySelector('#explanationText');
-      if (copyBtn && explanationText) {
-        copyBtn.addEventListener('click', () => {
-          navigator.clipboard.writeText(explanationText.textContent).then(() => {
-            copyBtn.textContent = '✓ Copied!';
-            copyBtn.classList.add('copied');
-            setTimeout(() => {
-              copyBtn.textContent = '📋 Copy Explanation';
-              copyBtn.classList.remove('copied');
-            }, 2000);
-          });
-        });
-      }
-      
-      // Re-enable dragging for the new content
-      makeTooltipDraggable();
+      // Add event listeners after content is loaded
+      attachEventListeners();
     }
   );
+}
+
+function attachEventListeners() {
+  // Add click handler to close button
+  const closeBtn = tooltip.querySelector('.kidify-close-btn');
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      tooltip.style.display = 'none';
+    };
+  }
+  
+  // Add copy functionality
+  const copyBtn = tooltip.querySelector('#copyBtn');
+  const explanationText = tooltip.querySelector('#explanationText');
+  if (copyBtn && explanationText) {
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(explanationText.textContent).then(() => {
+        copyBtn.textContent = '✓ Copied!';
+        copyBtn.classList.add('copied');
+        setTimeout(() => {
+          copyBtn.textContent = '📋 Copy';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy:', err);
+      });
+    };
+  }
 }
 
 // Only hide tooltip when clicking the close button or pressing Escape
@@ -309,43 +243,9 @@ tooltip.addEventListener('click', (e) => {
   e.stopPropagation();
 });
 
-// Make sure tooltip stays on top
-const checkZIndex = () => {
-  const maxZ = Math.max(
-    ...Array.from(document.querySelectorAll('*'))
-      .map(el => parseInt(window.getComputedStyle(el).zIndex) || 0)
-  );
-  if (maxZ > parseInt(tooltip.style.zIndex)) {
-    tooltip.style.zIndex = maxZ + 1;
-  }
-};
-
-// Check z-index when showing tooltip
-const observer = new MutationObserver(() => {
-  if (tooltip.style.display !== 'none') {
-    checkZIndex();
-  }
-});
-
-observer.observe(document.body, { childList: true, subtree: true });
-
-// Keep tooltip visible on scroll
-window.addEventListener('scroll', () => {
-  // Tooltip stays open - no action needed
-});
-
-// Add resize handler to keep tooltip in viewport
-window.addEventListener('resize', () => {
-  if (tooltip.style.display === 'none') return;
-  
-  const rect = tooltip.getBoundingClientRect();
-  const maxX = window.innerWidth - rect.width - 20;
-  const maxY = window.innerHeight - rect.height - 20;
-  
-  if (rect.left > maxX) {
-    tooltip.style.left = `${maxX}px`;
-  }
-  if (rect.top > maxY) {
-    tooltip.style.top = `${maxY}px`;
-  }
-});
+// Optional: Hide tooltip when clicking outside (remove this if you want it to stay open)
+// document.addEventListener('click', (e) => {
+//   if (!tooltip.contains(e.target)) {
+//     tooltip.style.display = 'none';
+//   }
+// });
