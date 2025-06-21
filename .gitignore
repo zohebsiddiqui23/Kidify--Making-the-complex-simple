@@ -1,0 +1,30 @@
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Development
+node_modules/
+*.log
+
+# Build files
+*.zip
+dist/
+build/
+
+# Environment files (just in case)
+.env
+.env.local
+.env.*.local
+
+# Personal notes
+notes.txt
+TODO.md
+
+# Test files
+test-api-key.txt
