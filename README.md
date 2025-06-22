@@ -30,7 +30,7 @@
    ```bash
    git clone https://github.com/yourusername/kidify-extension.git
    ```
-   Or [download as ZIP](https://github.com/yourusername/kidify-extension/archive/main.zip) and extract
+   Or [download as ZIP](https://github.com/zohebsiddiqui23/Kidify--Making-the-complex-simple/archive/main.zip) and extract
 
 2. **Open Chrome Extensions**
    - Navigate to `chrome://extensions/`
@@ -189,20 +189,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Powered by [Cohere AI](https://cohere.ai/) - Amazing AI models
 - Icons from [Icons8](https://icons8.com/) 
 - Inspired by the need to make information accessible to everyone
-- Thanks to all our [contributors](https://github.com/yourusername/kidify-extension/graphs/contributors)
+- Thanks to all our [contributors](https://github.com/zohebsiddiqui23/Kidify--Making-the-complex-simple/graphs/contributors)
 
 ## 📧 Contact
 
-- Report bugs: [GitHub Issues](https://github.com/yourusername/kidify-extension/issues)
-- Feature requests: [GitHub Discussions](https://github.com/yourusername/kidify-extension/discussions)
+- Report bugs: [GitHub Issues](https://github.com/zohebsiddiqui23/Kidify--Making-the-complex-simple/issues)
+- Feature requests: [GitHub Discussions](https://github.com/zohebsiddiqui23/Kidify--Making-the-complex-simple/discussions)
 - Security issues: Please email directly (see profile)
 
 ---
 
 <p align="center">
-  Made with ❤️ by developers who believe in making the web more understandable
-</p>
-
-<p align="center">
-  <a href="https://github.com/yourusername/kidify-extension/stargazers">⭐ Star us on GitHub!</a>
+  <a href="https://github.com/zohebsiddiqui23/Kidify--Making-the-complex-simple/stargazers">⭐ Star us on GitHub!</a>
 </p>
