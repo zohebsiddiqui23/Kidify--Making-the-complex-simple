@@ -24,9 +24,7 @@
 - 🎨 **Beautiful UI** - Clean, kid-friendly design with smooth animations
 - ⚡ **Works Everywhere** - Functions on any website
 
-## 🚀 Installation
-
-### Option 1: Load from Source (Recommended)
+## 🚀 Installation - Load from Source 
 
 1. **Download the extension**
    ```bash
@@ -45,8 +43,6 @@
 4. **You're ready!** 
    - The Kidify icon should appear in your toolbar
 
-### Option 2: Chrome Web Store
-*Coming soon!*
 
 ## 🔑 Setup
 
@@ -124,7 +120,6 @@ We love contributions! Here's how you can help:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ### Running Tests
 ```bash
@@ -175,7 +170,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 | Firefox | ❌ Not yet (different extension API) |
 | Safari  | ❌ Not yet |
 
-## 🗺️ Roadmap
+## 🗺️ Roadmap for future development
 
 - [ ] Firefox support
 - [ ] Custom explanation styles (even simpler, more detailed, etc.)
